@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const translator = require("translate");
 
+const { TOKEN } = require("credentials.json");
+
 const client = new Discord.Client();
 
 const prefix = "°";
@@ -126,4 +128,4 @@ client.on("message", msg => {
 	.catch(console.error);
 });
 
-client.login("NzA4Mzk0MzE5NDQ2NDA5Mjc3.XrWtug.tjOPRTVAn4sjiCUxT3Wd3NCKfhE");
+client.login(TOKEN);
