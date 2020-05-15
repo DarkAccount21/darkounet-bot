@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const fetch = require("node-fetch");
 const translator = require("translate");
 
-const { TOKEN } = require("credentials.json");
+const { TOKEN } = require("./credentials.json");
 
 const client = new Discord.Client();
 
