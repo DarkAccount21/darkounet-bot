@@ -95,7 +95,7 @@ client.on("message", msg => {
 			}
 		}
 		for (const keyword in videos) {
-			if (msg.content.substr(prefix.length + 1, keyword.length + 1) != keyword + " ")
+			if (msg.content.substr(prefix.length + 1, keyword.length) != keyword)
 				continue;
 			const user = msg.author.username;
 			const user2Mention = msg.content.substr(prefix.length + 2 + keyword.length);
