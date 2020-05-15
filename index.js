@@ -18,6 +18,7 @@ const dico = [
 const videos = {
 	["run"]: {
 		["joke"]: "[user] fuit [user2]",
+		["joke solo"]: "[user] s'enfuit",
 		["links"]: [
 			"https://media1.tenor.com/images/8f6323f71a398a806361d8c1e80bbcb3/tenor.gif?itemid=5501383",
 			"https://i.pinimg.com/originals/0c/e8/be/0ce8bec2543d81ba65eefd309f0f0c5b.gif",
@@ -33,6 +34,7 @@ const videos = {
 	},
 	["kiss"]: {
 		["joke"]: "[user] embrasse [user2]",
+		["joke solo"]: "[user] s'embrasse tout seul",
 		"links": [
 			"https://media.tenor.com/images/a6052b4b3da2cb545467f7b499935c40/tenor.gif",
 			"https://media.tenor.com/images/fbb2b4d5c673ffcf8ec35e4652084c2a/tenor.gif",
@@ -88,7 +90,7 @@ client.on("message", msg => {
 	(async () => {
 		if (msg.author.tag === "Darkounet#5487")
 			return;
-		if (msg.content.substr(0, prefix.length + 1) !== prefix + " ")
+		if (msg.content.substr(0, prefix.length) !== prefix)
 			return;
 		for (const d of dico) {
 			if (msg.content.match(new RegExp(d[0], "i"))) {
@@ -97,21 +99,29 @@ client.on("message", msg => {
 			}
 		}
 		for (const keyword in videos) {
-			if (msg.content.substr(prefix.length + 1, keyword.length) != keyword)
+			if (msg.content.substr(prefix.length, keyword.length) != keyword)
 				continue;
-			const user = msg.author.username;
-			const user2Mention = msg.content.substr(prefix.length + 2 + keyword.length);
-			let user2 = getUserFromMention(user2Mention);
-			if (!user2)
-				user2 = "Darkounet";
-			else
-				user2 = user2.username;
-			const joke = videos[keyword].joke
-			.replace(/\[user\]/g, user)
-			.replace(/\[user2\]/g, user2);
+			const user = msg.author;
+			const suiteDuMessage = msg.content.substr(prefix.length + keyword.length + 1);
+			let user2 = getUserFromMention(suiteDuMessage);
+			if (suiteDuMessage == "random") {
+				const memberList = [];
+				msg.channel.members.forEach(function(member) {
+					memberList.push(member.user);
+				});
+				user2 = memberList[Math.floor(Math.random() * memberList.length)];
+			}
+			let joke = "";
+			if (user2) {
+				joke = videos[keyword]["joke"]
+				.replace(/\[user\]/g, user.username)
+				.replace(/\[user2\]/g, user2.username);
+			} else {
+				joke = videos[keyword]["joke solo"]
+				.replace(/\[user\]/g, user.username);
+			}
 			const links = videos[keyword].links;
-			const randomIndex = Math.floor(Math.random() * links.length);
-			const link = links[randomIndex];
+			const link = links[Math.floor(Math.random() * links.length)];
 			const embed = new Discord.MessageEmbed()
 			.setColor("#FF00FF")
 			.setTitle(joke)
